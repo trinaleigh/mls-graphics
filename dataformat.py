@@ -98,10 +98,12 @@ def writeCSV(recordDict, teamList, filename):
     # remove brackets, quotes, extra spaces
     # header is the list of teams
     # following lines include win-loss-draw by week
-    file.write(str(teamList).replace('[', '').replace(']', '').replace("'", "").replace(', ', ',') + '\n')
+    file.write('Week,' + str(teamList).replace('[', '').replace(']', '').replace("'", "").replace(', ', ',') + '\n')
 
+    i = 1
     for week in byWeek:
-        file.write(str(week).replace('(', '').replace(')', '').replace(', ', ',')  + '\n')
+        file.write(str(i) + ',' + str(week).replace('(', '').replace(')', '').replace(', ', ',')  + '\n')
+        i += 1
 
     file.close()
 
