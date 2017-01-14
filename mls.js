@@ -1,44 +1,80 @@
-const team = 'Philadelphia Union'
+//const team = 'Philadelphia Union'
 
-// initialize the svg
-var plotArea = d3.select("body");
- 
-var vizArea = plotArea.append("svg")
-	.attr("width", 1000)
-    .attr("height", 600);
+var input = document.getElementById("team_picker");
+input.addEventListener('change',updatePage);
 
-var x = d3.scaleLinear()
-	.domain([1,34])
-    .range([0, 1000]);
+counter = 0
 
-var y = d3.scaleLinear()
-	.domain([0,3])
-    .range([600, 0]);
+function updatePage() {
+      if(counter > 0){
+      	var oldPlot = document.getElementById("points")
+      	oldPlot.remove()
+     	}
+      var team = this.value;
+      if(team !== "null"){
+      	plotRecord(team)
+      } else {
+      	counter = 0
+      };
+  }
 
-var trendline = d3.line()
-    .x(function(d) { return x(d.Week);  })
-    .y(function(d) { console.log(d[team]); return y(d[team]); });
 
-// plot team info from data file
-d3.csv("data.txt", function(data){
-	data.forEach(function(d){
-		// convert to numbers
-		d.Week = +d.Week
-		d[team] = +d[team];  
+function plotRecord(team){
+	// initialize the svg
+	var plotArea = d3.select("body");
+
+	var margin = {top: 30, right: 30, bottom: 30, left: 30},
+	    w = 1000 - margin.left - margin.right,
+	    h = 500 - margin.top - margin.bottom;
+
+	var vizArea = plotArea.append("svg")
+		.attr("id","points")
+		.attr("width", w + margin.left + margin.right)
+	    .attr("height", h + margin.top + margin.bottom)
+	    .append("g")
+	        .attr("transform", 
+	              "translate(" + margin.left + "," + margin.top + ")");
+
+	var x = d3.scaleLinear()
+		.domain([0,35])
+	    .range([0, w]);
+
+	var y = d3.scaleLinear()
+		.domain([-1,4])
+	    .range([h, 0]);
+
+	var trendline = d3.line()
+	    .x(function(d) { return x(d.Week);  })
+	    .y(function(d) { return y(d[team]); });
+
+	// plot team info from data file
+	d3.csv("data.txt", function(data){
+		data.forEach(function(d){
+			// convert to numbers
+			d.Week = +d.Week
+			d[team] = +d[team];  
+		});
+
+		vizArea.append("path")
+			.attr("class", "line")
+	        .attr("d", trendline(data));
+
+	    vizArea.selectAll("dot")
+	        .data(data)
+	      	.enter()
+	      	.append("circle")
+	        .attr("r", 4)
+	        .attr("cx", function(d) { return x(d.Week); })
+	        .attr("cy", function(d) { return y(d[team]); });
+
+	    vizArea.append("g")
+	      .call(d3.axisBottom(x))
+	      .attr("transform", "translate(0," + h + ")");
+
+	  	vizArea.append("g")
+	      .call(d3.axisLeft(y))
 	});
-
-	vizArea.append("path")
-		.attr("class", "line")
-        .attr("d", trendline(data));
-
-    vizArea.selectAll("dot")
-        .data(data)
-      	.enter().append("circle")
-        .attr("r", 3.5)
-        .attr("cx", function(d) { return x(d.Week); })
-        .attr("cy", function(d) { return y(d[team]); });
-
-
-});
-
+	// increment counter
+	counter++
+}
 

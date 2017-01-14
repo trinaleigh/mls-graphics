@@ -1,4 +1,4 @@
-body {
+* {
     font-family: Courier;
     color: #000000;
     font-weight: bold;
@@ -11,6 +11,11 @@ p {
 
 div {
 	position: relative;
+}
+
+svg {
+	display: block;
+	margin: auto;
 }
 
 .line {
