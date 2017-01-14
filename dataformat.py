@@ -2,11 +2,14 @@
 
 from urllib.request import urlopen
 
-data = urlopen('https://raw.githubusercontent.com/openfootball/major-league-soccer/master/2016/mls.txt')
-records = []
-for line in data:
-    records.append(line.decode('utf-8'))  # convert from byte object to str
+def getData():
+    data = urlopen('https://raw.githubusercontent.com/openfootball/major-league-soccer/master/2016/mls.txt')
+    records = []
 
+    for line in data:
+        records.append(line.decode('utf-8'))  # convert from byte object to str
+
+    return records
 
 def reformat(gameList):
     """
@@ -39,10 +42,25 @@ def reformat(gameList):
 
     return recordDict
 
+def findTeams(recordDict):
+    """
+    takes in a dictionary of games
+    returns a list of all unique team names
+    """
+    teamList = []
+    for gameNum, game in recordDict.items():
+        if game['home'] not in teamList:
+            teamList.append(game['home'])
+
+    # alphabetical order
+    teamList.sort()
+
+    return teamList
+
 
 def season(team, recordDict):
     """
-    takes in a dictionary representing all games
+    takes in a dictionary of games
     returns a win-loss-draw record for the given team name
     output is a list of point values where 0 represents a loss, 1 represents a draw, and 3 represents a win
     """
@@ -61,18 +79,43 @@ def season(team, recordDict):
 
     return outcomeList
 
-
-def stringFormat(teamList):
+def writeCSV(recordDict, teamList, filename):
     """
-    formats win-loss-draw record for csv
+    takes in a dictionary of games and a list of teams include in CSV
+    writes win-loss-draw record to CSV
     """
-    writeList = str(teamList)
-    writeList = writeList.replace("[", "").replace("]", "")
-    return writeList
+    file = open(filename, "w")
 
+    # get the full record for each team
+    byTeam = []
+    for team in teamList:
+        byTeam.append(season(team, recordDict))
+
+    # zip to rearrange from teams to weeks (for CSV rows)
+    byWeek = list(zip(*byTeam))
+
+    # write to CSV
+    # remove brackets, quotes, extra spaces
+    # header is the list of teams
+    # following lines include win-loss-draw by week
+    file.write(str(teamList).replace('[', '').replace(']', '').replace("'", "").replace(', ', ',') + '\n')
+
+    for week in byWeek:
+        file.write(str(week).replace('(', '').replace(')', '').replace(', ', ',')  + '\n')
+
+    file.close()
+
+def initialize():
+    records = getData()
+    allGames = reformat(records)
+    allTeams = findTeams(allGames)
+    writeCSV(allGames, allTeams, "data.txt")
+
+initialize()
 
 # TESTS
-# # get and copy data
+# get and copy data
+# records = getData()
 # print(records)
 # testLine = records[5]
 # print(testLine)
@@ -86,9 +129,15 @@ def stringFormat(teamList):
 # print(phillyRecord)
 # print(len(phillyRecord))  # length should be 34 for the 2016 season
 #
-# write to file
-file = open("data.txt", "w")
-allGames = reformat(records)
-phillyRecord = stringFormat(season("Philadelphia Union", allGames))
-file.write(phillyRecord)
-file.close()
+# find list of teams
+# records = getData()
+# allGames = reformat(records)
+# teams = findTeams(allGames)
+# print(teams)
+# print(len(teams))  # length should be 20 for the 2016 season
+#
+# #CSV
+# records = getData()
+# allGames = reformat(records)
+# allTeams = findTeams(allGames)
+# writeCSV(allGames, allTeams, "data.txt")
