@@ -62,6 +62,15 @@ def season(team, recordDict):
     return outcomeList
 
 
+def stringFormat(teamList):
+    """
+    formats win-loss-draw record for csv
+    """
+    writeList = str(teamList)
+    writeList = writeList.replace("[", "").replace("]", "")
+    return writeList
+
+
 # TESTS
 # # get and copy data
 # print(records)
@@ -71,9 +80,15 @@ def season(team, recordDict):
 # # parse data
 # print(reformat(records))
 #
-# compute season
-
+# # compute season
+# allGames = reformat(records)
+# phillyRecord = season("Philadelphia Union", allGames)
+# print(phillyRecord)
+# print(len(phillyRecord))  # length should be 34 for the 2016 season
+#
+# write to file
+file = open("data.txt", "w")
 allGames = reformat(records)
-phillyRecord = season("Philadelphia Union", allGames)
-print(phillyRecord)
-print(len(phillyRecord))  # length should be 34 for the 2016 season
+phillyRecord = stringFormat(season("Philadelphia Union", allGames))
+file.write(phillyRecord)
+file.close()
