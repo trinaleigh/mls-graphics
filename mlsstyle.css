@@ -23,7 +23,16 @@ svg {
 }
 
 .line {
-  fill: none;
-  stroke: #22A5FF;
-  stroke-width: 2px;
+	fill: none;
+	stroke: var(--primary);
+	stroke-width: 3px;
+}
+
+.dot {
+	fill: var(--secondary);
+}
+
+.axis {
+	stroke-width: 3px;
+	font-size: 20;
 }

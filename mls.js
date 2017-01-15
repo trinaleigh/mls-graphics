@@ -5,6 +5,29 @@ input.addEventListener('change',updatePage);
 // counter = 0 when there is no graph to remove
 counter = 0
 
+const teamColors = {
+	"Chicago Fire" : ['#102141','#B51737'],
+	"Colorado Rapids" : ['#862633','#8BB8E8'],
+	"Columbus Crew" : ['#FFF200','#000000'],
+	"DC United" : ['#EF3E42','#000000'],
+	"FC Dallas" : ['#BF0D3E','#00205B'],
+	"Houston Dynamo" : ['#F68712','#8DC6ED'],
+	"Los Angeles Galaxy" : ['#00245D','#3365B1'],
+	"Montreal Impact" : ['#00529B','#000000'],
+	"New England Revolution" : ['#C63323','#222352'],
+	"New York City" : ['#69ACE5','#0F1D41'],
+	"New York Red Bulls" : ['#ED1E36','#23326A'],
+	"Orlando City" : ['#612B9B','#FFE198'],
+	"Philadelphia Union" : ['#0E1B2A','#B1872D'],
+	"Portland Timbers" : ['#EAE727','#004812'],
+	"Real Salt Lake" : ['#B30838','#013A81'],
+	"San Jose Earthquakes" : ['#231F20','#0D4C92'],
+	"Seattle Sounders" : ['#005695','#5D9732'],
+	"Sporting Kansas City" : ['#93B1D7','#002A5C'],
+	"Toronto FC" : ['#E31937','#455560'],
+	"Vancouver Whitecaps" : ['#00245E','#9DC2EA']
+	};
+
 function updatePage() {
       if(counter > 0){
       	var oldPlot = document.getElementById("points")
@@ -12,6 +35,8 @@ function updatePage() {
      	}
       var team = this.value;
       if(team !== "null"){
+      	document.documentElement.style.setProperty(`--primary`, teamColors[team][0]);
+      	document.documentElement.style.setProperty(`--secondary`, teamColors[team][1]);
       	plotRecord(team)
       } else {
       	counter = 0
@@ -37,7 +62,7 @@ function plotRecord(team){
 
 	// scale x and y values to plot area
 	var x = d3.scaleLinear()
-		.domain([0,35])
+		.domain([1,34])
 	    .range([0, w]);
 
 	var y = d3.scaleLinear()
@@ -58,6 +83,17 @@ function plotRecord(team){
 			d[team] = +d[team];  
 		});
 
+		vizArea.append("g")
+	      .call(d3.axisBottom(x))
+	      .attr("class", "axis")
+	      .attr("transform", "translate(0," + h + ")");
+
+	  	vizArea.append("g")
+	      .call(d3.axisLeft(y)
+	      .tickValues([0,1,3])
+	      .tickFormat(d3.format("d")))
+	      .attr("class", "axis");
+
 		vizArea.append("path")
 			.attr("class", "line")
 	        .attr("d", trendline(data));
@@ -66,19 +102,15 @@ function plotRecord(team){
 	        .data(data)
 	      	.enter()
 	      	.append("circle")
-	        .attr("r", 4)
+	        .attr("r", 5)
 	        .attr("cx", function(d) { return x(d.Week); })
-	        .attr("cy", function(d) { return y(d[team]); });
+	        .attr("cy", function(d) { return y(d[team]); })
+	       	.attr("class","dot");
 
-	    vizArea.append("g")
-	      .call(d3.axisBottom(x))
-	      .attr("transform", "translate(0," + h + ")");
-
-	  	vizArea.append("g")
-	      .call(d3.axisLeft(y).tickValues([0,1,3]));
-	});
+		});
 	
 	// increment counter
 	counter++
-}
+
+	}
 
