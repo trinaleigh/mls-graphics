@@ -1,8 +1,8 @@
-//const team = 'Philadelphia Union'
-
+// get the team from user selection
 var input = document.getElementById("team_picker");
 input.addEventListener('change',updatePage);
 
+// counter = 0 when there is no graph to remove
 counter = 0
 
 function updatePage() {
@@ -35,17 +35,20 @@ function plotRecord(team){
 	        .attr("transform", 
 	              "translate(" + margin.left + "," + margin.top + ")");
 
+	// scale x and y values to plot area
 	var x = d3.scaleLinear()
 		.domain([0,35])
 	    .range([0, w]);
 
 	var y = d3.scaleLinear()
-		.domain([-1,4])
+		.domain([0,3])
 	    .range([h, 0]);
 
+	// generate x and y values
 	var trendline = d3.line()
 	    .x(function(d) { return x(d.Week);  })
-	    .y(function(d) { return y(d[team]); });
+	    .y(function(d) { return y(d[team]); })
+	    .curve(d3.curveMonotoneX); // define curve function here
 
 	// plot team info from data file
 	d3.csv("data.txt", function(data){
@@ -72,8 +75,9 @@ function plotRecord(team){
 	      .attr("transform", "translate(0," + h + ")");
 
 	  	vizArea.append("g")
-	      .call(d3.axisLeft(y))
+	      .call(d3.axisLeft(y).tickValues([0,1,3]));
 	});
+	
 	// increment counter
 	counter++
 }

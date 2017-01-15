@@ -5,7 +5,11 @@
 }
 
 p {
-	font-size: 24;
+	font-size: 18;
+}
+
+select {
+	font-size: 18;
 	position: relative;
 }
 
