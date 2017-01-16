@@ -94,9 +94,18 @@ function plotRecord(team){
 	      .tickFormat(d3.format("d")))
 	      .attr("class", "axis");
 
-		vizArea.append("path")
+		path = vizArea.append("path")
 			.attr("class", "line")
 	        .attr("d", trendline(data));
+	       
+	    var pathLength = path.node().getTotalLength();
+
+    	path
+	      .attr("stroke-dasharray", pathLength + " " + pathLength)
+	      .attr("stroke-dashoffset", pathLength)
+	      .transition()
+	      .duration(5000)
+          .attr("stroke-dashoffset", 0);
 
 	    vizArea.selectAll("dot")
 	        .data(data)
