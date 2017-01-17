@@ -7,6 +7,7 @@ page displays Major League Soccer statistics by team for the 2016 season.
 ## instructions
 
 download all files* and open index.html in browser
+
 \*dataformat.py is not required
 
 files:
