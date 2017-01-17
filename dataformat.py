@@ -11,17 +11,21 @@ def getData():
 
     return records
 
+
 def reformat(gameList):
     """
     parses raw data
-    returns a dictionary where the key is the game number
-    the value is a nested dictionary containing:
-        home team
-        home team score
-        away team
-        away team score
+    returns:
+        1) a dictionary where the key is the game number
+        the value is a nested dictionary containing:
+            home team
+            home team score
+            away team
+            away team score
+        2) a list of all unique team names
     """
     recordDict = {}
+    teamList = []
 
     i = 0
     for game in gameList:
@@ -38,24 +42,15 @@ def reformat(gameList):
             away = game[breakpt+3:-1]
             awayScore = int(game[breakpt+1])
             recordDict[i] = {'home':home, 'homeScore':homeScore, 'away':away, 'awayScore':awayScore}
+            # add team names to the team list
+            if home not in teamList:
+                teamList.append(home)
             i += 1
-
-    return recordDict
-
-def findTeams(recordDict):
-    """
-    takes in a dictionary of games
-    returns a list of all unique team names
-    """
-    teamList = []
-    for gameNum, game in recordDict.items():
-        if game['home'] not in teamList:
-            teamList.append(game['home'])
 
     # alphabetical order
     teamList.sort()
 
-    return teamList
+    return recordDict, teamList
 
 
 def season(team, recordDict):
@@ -109,14 +104,13 @@ def writeCSV(recordDict, teamList, filename):
 
 def initialize():
     records = getData()
-    allGames = reformat(records)
-    allTeams = findTeams(allGames)
+    allGames, allTeams = reformat(records)
     writeCSV(allGames, allTeams, "data.txt")
 
 initialize()
 
-# TESTS
-# get and copy data
+# # TESTS
+# # get and copy data
 # records = getData()
 # print(records)
 # testLine = records[5]
@@ -126,20 +120,13 @@ initialize()
 # print(reformat(records))
 #
 # # compute season
-# allGames = reformat(records)
+# allGames, allTeams = reformat(records)
 # phillyRecord = season("Philadelphia Union", allGames)
 # print(phillyRecord)
 # print(len(phillyRecord))  # length should be 34 for the 2016 season
 #
-# find list of teams
-# records = getData()
-# allGames = reformat(records)
-# teams = findTeams(allGames)
-# print(teams)
-# print(len(teams))  # length should be 20 for the 2016 season
-#
 # #CSV
 # records = getData()
-# allGames = reformat(records)
-# allTeams = findTeams(allGames)
+# allGames, allTeams = reformat(records)
+# print(len(allTeams))  # length should be 20 for the 2016 season#
 # writeCSV(allGames, allTeams, "data.txt")
