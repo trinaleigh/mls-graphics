@@ -48,7 +48,7 @@ function plotRecord(team){
 	// initialize the svg
 	var plotArea = d3.select("body");
 
-	var margin = {top: 30, right: 30, bottom: 30, left: 30},
+	var margin = {top: 50, right: 30, bottom: 50, left: 30},
 	    w = 1000 - margin.left - margin.right,
 	    h = 500 - margin.top - margin.bottom;
 
@@ -115,6 +115,13 @@ function plotRecord(team){
 	        .attr("cx", function(d) { return x(d.Week); })
 	        .attr("cy", function(d) { return y(d[team]); })
 	       	.attr("class","dot");
+
+	    var label = vizArea.append("text")
+	    	.attr("x", 0)
+            .attr("y", - margin.top/2)
+            .text("regular season points by week")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "20px");
 
 		});
 	
