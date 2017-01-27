@@ -6,13 +6,14 @@ page displays Major League Soccer statistics by team for the 2016 season.
 
 ## instructions
 
-download all files* and open index.html in browser
-
-\*dataformat.py is not required
+npm install and run node index.js
 
 files:
-* dataformat.py: pulls raw data from open source github repo and generates data.txt
-* data.txt: contains the win-loss-tie record for each team by week in CSV format
-* index.html
-* mlsstyle.css
-* mls.js
+* index.js: express app
+* data folder 
+	- dataformat.py: pulls raw data from open source github repo and generates data.txt
+* page folder
+	- data.txt: contains the win-loss-tie record for each team by week in CSV format
+	- index.html
+	- mlsstyle.css
+	- mls.js
