@@ -8,7 +8,8 @@ page displays Major League Soccer statistics by team for the 2016 season.
 
 npm install and run node index.js
 
-files:
+## files
+
 * index.js: express app
 * data folder 
 	- dataformat.py: pulls raw data from open source github repo and generates data.txt
