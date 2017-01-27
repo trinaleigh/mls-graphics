@@ -1,0 +1,19 @@
+{
+  "name": "mls-graphics",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": "6.9.4"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "4.13.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trinaleigh/mls-graphics"
+  }
+}
