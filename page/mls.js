@@ -119,7 +119,7 @@ function plotRecord(team){
 	    var label = vizArea.append("text")
 	    	.attr("x", 0)
             .attr("y", - margin.top/2)
-            .text("regular season points by week")
+            .text("Regular Season Points by Week")
             .attr("font-family", "sans-serif")
             .attr("font-size", "20px");
 
